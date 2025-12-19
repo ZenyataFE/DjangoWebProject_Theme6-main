@@ -1,0 +1,173 @@
+КАК РАБОТАЮТ ИКОНКИ GLYPHICONS В ПРОЕКТЕ
+=========================================
+
+ЧТО ТАКОЕ GLYPHICONS:
+---------------------
+Glyphicons - это набор иконок, встроенный в Bootstrap 3.
+Они уже подключены в вашем проекте через файл bootstrap.css
+
+ГДЕ НАХОДЯТСЯ ФАЙЛЫ:
+-------------------
+Шрифты иконок находятся в папке:
+   app/static/app/fonts/
+   
+Там есть файлы:
+   - glyphicons-halflings-regular.eot
+   - glyphicons-halflings-regular.svg
+   - glyphicons-halflings-regular.ttf
+   - glyphicons-halflings-regular.woff
+
+КАК ИСПОЛЬЗОВАТЬ ИКОНКИ:
+------------------------
+Иконки добавляются через HTML тег <span> с классами:
+
+   <span class="glyphicon glyphicon-НАЗВАНИЕ-ИКОНКИ"></span>
+
+Примеры:
+   <span class="glyphicon glyphicon-heart"></span>      - сердце
+   <span class="glyphicon glyphicon-calendar"></span>   - календарь
+   <span class="glyphicon glyphicon-briefcase"></span>  - портфель
+   <span class="glyphicon glyphicon-map-marker"></span> - метка на карте
+
+
+ИКОНКИ, КОТОРЫЕ Я ИСПОЛЬЗОВАЛ ДЛЯ ССЫЛОК:
+-----------------------------------------
+
+1. glyphicon-briefcase
+   - Министерство здравоохранения (портфель = официальный орган)
+
+2. glyphicon-map-marker
+   - Комитет по здравоохранению Псковской области (метка = региональный орган)
+
+3. glyphicon-calendar
+   - Портал госуслуг (календарь = запись на приём)
+
+4. glyphicon-eye-open
+   - Росздравнадзор (глаз = надзор, контроль)
+
+5. glyphicon-heart
+   - Федеральный фонд ОМС (сердце = медицина, здоровье)
+
+6. glyphicon-arrow-right
+   - Стрелка в кнопках "Перейти на сайт"
+
+
+КАК ИЗМЕНИТЬ ИКОНКУ:
+--------------------
+Просто замените название иконки в классе:
+
+Было:
+   <span class="glyphicon glyphicon-briefcase"></span>
+
+Стало:
+   <span class="glyphicon glyphicon-home"></span>
+
+
+ПОПУЛЯРНЫЕ ИКОНКИ ДЛЯ МЕДИЦИНСКОЙ ТЕМЫ:
+---------------------------------------
+
+Медицина и здоровье:
+   glyphicon-heart          - сердце
+   glyphicon-plus-sign      - плюс (добавить)
+   glyphicon-ok             - галочка (готово)
+   glyphicon-remove         - крестик (удалить)
+   glyphicon-user           - пользователь
+   glyphicon-user-md        - врач
+
+Документы и информация:
+   glyphicon-file           - файл
+   glyphicon-folder-open    - папка
+   glyphicon-list-alt       - список
+   glyphicon-book           - книга
+   glyphicon-info-sign      - информация
+
+Контакты и связь:
+   glyphicon-phone          - телефон
+   glyphicon-phone-alt      - телефон (альтернативный)
+   glyphicon-envelope       - письмо
+   glyphicon-map-marker     - метка на карте
+   glyphicon-globe          - глобус (сайт)
+
+Время и расписание:
+   glyphicon-calendar       - календарь
+   glyphicon-time           - часы
+   glyphicon-clock          - часы (альтернативный)
+
+Действия:
+   glyphicon-arrow-right    - стрелка вправо
+   glyphicon-arrow-left     - стрелка влево
+   glyphicon-search         - поиск
+   glyphicon-edit           - редактировать
+   glyphicon-print          - печать
+
+
+ПОЛНЫЙ СПИСОК ИКОНОК:
+--------------------
+Посмотреть все доступные иконки можно здесь:
+https://getbootstrap.com/docs/3.4/components/#glyphicons
+
+Или в официальной документации Bootstrap 3:
+https://getbootstrap.com/docs/3.4/
+
+
+КАК ДОБАВИТЬ СВОЮ ИКОНКУ К НОВОЙ ССЫЛКЕ:
+----------------------------------------
+
+1. Откройте файл: app/templates/app/links.html
+
+2. Найдите нужную иконку из списка выше
+
+3. Добавьте новую карточку:
+
+   <div class="col-md-6">
+       <div class="link-card">
+           <div class="link-icon">
+               <span class="glyphicon glyphicon-ВАША-ИКОНКА"></span>
+           </div>
+           <div class="link-content">
+               <h4>Название ссылки</h4>
+               <p class="link-description">Описание</p>
+               <a href="https://ссылка.ru/" target="_blank" class="link-button">
+                   Перейти на сайт <span class="glyphicon glyphicon-arrow-right"></span>
+               </a>
+           </div>
+       </div>
+   </div>
+
+4. Замените "ВАША-ИКОНКА" на название нужной иконки
+
+
+СТИЛИЗАЦИЯ ИКОНОК:
+------------------
+Иконки стилизованы через CSS в файле site.css:
+
+.link-icon {
+    background: linear-gradient(135deg, #1565c0, #0d47a1);
+    color: #ffffff;
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    ...
+}
+
+Вы можете изменить:
+- Размер: width и height
+- Цвет фона: background
+- Цвет иконки: color
+- Скругление: border-radius
+
+
+АЛЬТЕРНАТИВЫ GLYPHICONS:
+------------------------
+Если нужны другие иконки, можно использовать:
+
+1. Font Awesome (нужно подключить отдельно)
+2. Material Icons (Google)
+3. Feather Icons
+4. Или любые другие иконки через <img> тег
+
+Но Glyphicons уже встроены в Bootstrap и работают "из коробки"!
+
+
+
+

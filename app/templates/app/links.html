@@ -1,0 +1,91 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+{# Загрузка статических файлов: #}
+{% load staticfiles %}
+
+<h2>{{ title }}</h2>
+<h3>{{ message }}</h3>
+
+<div class="row" style="margin-top: 20px;">
+    <div class="col-md-6">
+        <div class="link-card">
+            <div class="link-icon">
+                <span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span>
+            </div>
+            <div class="link-content">
+                <h4>Министерство здравоохранения Российской Федерации</h4>
+                <p class="link-description">Официальный сайт Минздрава России</p>
+                <a href="https://www.rosminzdrav.ru/" target="_blank" class="link-button">
+                    Перейти на сайт <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="link-card">
+            <div class="link-icon">
+                <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+            </div>
+            <div class="link-content">
+                <h4>Комитет по здравоохранению Псковской области</h4>
+                <p class="link-description">Орган исполнительной власти Псковской области</p>
+                <a href="https://zdrav.pskov.ru/" target="_blank" class="link-button">
+                    Перейти на сайт <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="margin-top: 20px;">
+    <div class="col-md-6">
+        <div class="link-card">
+            <div class="link-icon">
+                <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+            </div>
+            <div class="link-content">
+                <h4>Портал государственных услуг</h4>
+                <p class="link-description">Запись на приём к врачу через Госуслуги</p>
+                <a href="https://www.gosuslugi.ru/" target="_blank" class="link-button">
+                    Перейти на сайт <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="link-card">
+            <div class="link-icon">
+                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+            </div>
+            <div class="link-content">
+                <h4>Росздравнадзор</h4>
+                <p class="link-description">Федеральная служба по надзору в сфере здравоохранения</p>
+                <a href="https://www.roszdravnadzor.gov.ru/" target="_blank" class="link-button">
+                    Перейти на сайт <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="margin-top: 20px; margin-bottom: 30px;">
+    <div class="col-md-6">
+        <div class="link-card">
+            <div class="link-icon">
+                <span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
+            </div>
+            <div class="link-content">
+                <h4>Федеральный фонд ОМС</h4>
+                <p class="link-description">Федеральный фонд обязательного медицинского страхования</p>
+                <a href="https://www.ffoms.gov.ru/" target="_blank" class="link-button">
+                    Перейти на сайт <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

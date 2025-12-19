@@ -1,0 +1,243 @@
+СХЕМА БАЗЫ ДАННЫХ (ER-ДИАГРАММА)
+ГБУЗ ПО «Островская межрайонная больница»
+==========================================
+
+ОСНОВНЫЕ СУЩНОСТИ
+-----------------
+
+┌─────────────────────────────────────────────────────────────┐
+│                      User (Django)                           │
+│  ───────────────────────────────────────────────────────     │
+│  PK: id (Integer)                                            │
+│      username (String)                                      │
+│      password (String, hashed)                              │
+│      email (String)                                         │
+│      first_name (String)                                    │
+│      last_name (String)                                     │
+│      is_staff (Boolean)                                     │
+│      is_active (Boolean)                                     │
+│      is_superuser (Boolean)                                 │
+│      date_joined (DateTime)                                 │
+│      last_login (DateTime)                                  │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              │ 1
+                              │
+                              │
+        ┌─────────────────────┼─────────────────────┐
+        │                     │                     │
+        │ N                   │ N                   │ N
+        ▼                     ▼                     ▼
+┌──────────────┐    ┌──────────────┐    ┌──────────────┐
+│    Blog      │    │   Comment    │    │  (используется│
+│              │    │              │    │   в других    │
+│              │    │              │    │   моделях)    │
+└──────────────┘    └──────────────┘    └──────────────┘
+
+ДЕТАЛЬНАЯ СХЕМА МОДЕЛЕЙ
+-----------------------
+
+┌─────────────────────────────────────────────────────────────┐
+│                      Blog (Posts)                           │
+│  ───────────────────────────────────────────────────────     │
+│  PK: id (Integer, Auto)                                     │
+│      title (CharField, max=100, unique_for_date)            │
+│      description (TextField)                                 │
+│      content (TextField)                                     │
+│      posted (DateTimeField, indexed, default=now)          │
+│      image (FileField, default='temp.jpg')                   │
+│      video_url (URLField, nullable)                          │
+│  FK: author → User (SET_NULL)                               │
+│                                                              │
+│  Методы:                                                     │
+│    - get_absolute_url()                                     │
+│    - __str__()                                              │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              │ 1
+                              │
+                              │
+                              │ N
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    Comment (Comments)                       │
+│  ───────────────────────────────────────────────────────     │
+│  PK: id (Integer, Auto)                                     │
+│      text (TextField)                                       │
+│      date (DateTimeField, indexed, default=now)             │
+│  FK: author → User (CASCADE)                                │
+│  FK: post → Blog (CASCADE)                                  │
+│                                                              │
+│  Методы:                                                     │
+│    - __str__()                                              │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│                  Feedback (Feedback)                        │
+│  ───────────────────────────────────────────────────────     │
+│  PK: id (Integer, Auto)                                     │
+│      name (CharField, max=100)                              │
+│      city (CharField, max=100)                              │
+│      job (CharField, max=100)                              │
+│      gender (CharField, choices: '1'/'2')                  │
+│      design (CharField, choices: '1'-'4')                   │
+│      content (CharField, choices: '1'-'4')                  │
+│      notice (BooleanField, default=False)                   │
+│      contact (BooleanField, default=False)                  │
+│      email (EmailField)                                     │
+│      message (TextField)                                    │
+│      date (DateTimeField, indexed, default=now)            │
+│                                                              │
+│  Методы:                                                     │
+│    - __str__()                                              │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│                    Doctor (Doctors)                         │
+│  ───────────────────────────────────────────────────────     │
+│  PK: id (Integer, Auto)                                     │
+│      full_name (CharField, max=200)                         │
+│      specialty (CharField, max=200)                         │
+│      office (CharField, max=50, nullable)                   │
+│      work_schedule (CharField, max=200, nullable)           │
+│      is_active (BooleanField, default=True)                 │
+│                                                              │
+│  Методы:                                                     │
+│    - __str__()                                              │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              │ 1
+                              │
+                              │
+                              │ N
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                Appointment (Appointments)                   │
+│  ───────────────────────────────────────────────────────     │
+│  PK: id (Integer, Auto)                                     │
+│      patient_name (CharField, max=200)                      │
+│      appointment_date (DateField)                           │
+│      appointment_time (CharField, choices: TIME_SLOTS)      │
+│      phone (CharField, max=20)                              │
+│      email (EmailField, nullable)                           │
+│      comment (TextField, nullable)                           │
+│      created_at (DateTimeField, indexed, default=now)       │
+│      is_confirmed (BooleanField, default=False)             │
+│  FK: doctor → Doctor (CASCADE)                              │
+│                                                              │
+│  Уникальность:                                               │
+│    UNIQUE(doctor, appointment_date, appointment_time)       │
+│                                                              │
+│  Методы:                                                     │
+│    - __str__()                                              │
+└─────────────────────────────────────────────────────────────┘
+
+СВЯЗИ МЕЖДУ СУЩНОСТЯМИ
+----------------------
+
+User ──(1:N)──> Blog
+  │                │
+  │                │
+  │                └──(1:N)──> Comment
+  │                             │
+  │                             │
+  └─────────────────────────────┘
+
+Doctor ──(1:N)──> Appointment
+
+Независимые сущности:
+  - Feedback (не связана с другими)
+
+ТИПЫ СВЯЗЕЙ
+-----------
+
+1. User → Blog (1:N)
+   - Один пользователь может создать много статей
+   - При удалении пользователя: SET_NULL (статьи остаются)
+
+2. User → Comment (1:N)
+   - Один пользователь может оставить много комментариев
+   - При удалении пользователя: CASCADE (комментарии удаляются)
+
+3. Blog → Comment (1:N)
+   - Одна статья может иметь много комментариев
+   - При удалении статьи: CASCADE (комментарии удаляются)
+
+4. Doctor → Appointment (1:N)
+   - Один врач может иметь много записей
+   - При удалении врача: CASCADE (записи удаляются)
+
+ИНДЕКСЫ
+-------
+
+Blog:
+  - posted (db_index=True)
+
+Comment:
+  - date (db_index=True)
+
+Feedback:
+  - date (db_index=True)
+
+Appointment:
+  - created_at (db_index=True)
+  - UNIQUE(doctor, appointment_date, appointment_time)
+
+УНИКАЛЬНЫЕ ОГРАНИЧЕНИЯ
+----------------------
+
+Blog:
+  - unique_for_date: title + posted
+
+Appointment:
+  - unique_together: (doctor, appointment_date, appointment_time)
+
+ОПИСАНИЕ ПОЛЕЙ
+--------------
+
+Blog:
+  - title: Заголовок статьи (уникален для даты)
+  - description: Краткое содержание
+  - content: Полное содержание
+  - posted: Дата публикации
+  - image: Путь к изображению
+  - video_url: Ссылка на видео (YouTube и др.)
+  - author: Автор статьи (может быть NULL)
+
+Comment:
+  - text: Текст комментария
+  - date: Дата добавления
+  - author: Автор комментария (обязательно)
+  - post: Статья, к которой комментарий (обязательно)
+
+Feedback:
+  - name: Имя отправителя
+  - city: Город
+  - job: Род занятий
+  - gender: Пол (Мужской/Женский)
+  - design: Оценка дизайна (1-4)
+  - content: Оценка контента (1-4)
+  - notice: Согласие на новости
+  - contact: Разрешение на связь
+  - email: Email адрес
+  - message: Текст отзыва
+  - date: Дата отправки
+
+Doctor:
+  - full_name: ФИО врача
+  - specialty: Специальность
+  - office: Номер кабинета
+  - work_schedule: График работы
+  - is_active: Активен ли врач
+
+Appointment:
+  - patient_name: ФИО пациента
+  - doctor: Врач (FK)
+  - appointment_date: Дата приёма
+  - appointment_time: Время приёма (09:00-17:00, шаг 30 мин)
+  - phone: Телефон пациента
+  - email: Email (необязательно)
+  - comment: Комментарий (необязательно)
+  - created_at: Дата создания записи
+  - is_confirmed: Подтверждена ли запись
+

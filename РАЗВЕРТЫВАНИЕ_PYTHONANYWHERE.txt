@@ -1,0 +1,244 @@
+ПОЛНАЯ ИНСТРУКЦИЯ ПО РАЗВЕРТЫВАНИЮ НА PYTHONANYWHERE
+=====================================================
+
+ШАГ 1: РЕГИСТРАЦИЯ И ПОДГОТОВКА
+--------------------------------
+
+1. Зарегистрируйтесь на PythonAnywhere:
+   https://www.pythonanywhere.com/
+   
+   - Бесплатный аккаунт: ваш_username.pythonanywhere.com
+   - Платный аккаунт: можно использовать свой домен
+
+2. После регистрации войдите в аккаунт
+
+
+ШАГ 2: ЗАГРУЗКА ФАЙЛОВ ПРОЕКТА
+-------------------------------
+
+Способ 1: Через веб-интерфейс (Files)
+
+1. В панели управления нажмите "Files"
+2. Создайте папку для проекта (например, mysite)
+3. Загрузите все файлы проекта:
+   - Загрузите папку целиком или отдельные файлы
+   - Убедитесь, что структура папок сохранена
+
+Способ 2: Через Git (рекомендуется)
+
+1. Загрузите проект на GitHub/GitLab
+2. В консоли PythonAnywhere выполните:
+   git clone https://github.com/ваш_username/ваш_репозиторий.git
+
+Способ 3: Через Bash консоль
+
+1. Откройте Bash консоль в PythonAnywhere
+2. Используйте wget или curl для загрузки архива проекта
+
+
+ШАГ 3: НАСТРОЙКА ВИРТУАЛЬНОГО ОКРУЖЕНИЯ
+----------------------------------------
+
+1. Откройте Bash консоль в PythonAnywhere
+
+2. Перейдите в папку проекта:
+   cd ~/DjangoWebProject_Theme6-main
+   (или cd ~/ваша_папка_проекта)
+
+3. Создайте виртуальное окружение:
+   mkvirtualenv --python=/usr/bin/python3.9 myenv
+   (или python3.8, в зависимости от доступной версии)
+
+4. Активируйте виртуальное окружение:
+   workon myenv
+
+5. Установите зависимости:
+   pip install --user django==1.11.29
+   (или pip install -r requirements.txt)
+
+
+ШАГ 4: НАСТРОЙКА БАЗЫ ДАННЫХ
+-----------------------------
+
+1. В консоли (с активированным виртуальным окружением):
+   cd ~/DjangoWebProject_Theme6-main
+   python manage.py migrate
+
+2. Создайте суперпользователя:
+   python manage.py createsuperuser
+
+
+ШАГ 5: НАСТРОЙКА СТАТИЧЕСКИХ ФАЙЛОВ
+-----------------------------------
+
+1. Соберите статические файлы:
+   python manage.py collectstatic
+   
+   (На вопрос "This will overwrite existing files!" ответьте yes)
+
+2. Статические файлы будут собраны в папку static/
+
+
+ШАГ 6: НАСТРОЙКА SETTINGS.PY ДЛЯ PRODUCTION
+--------------------------------------------
+
+Откройте файл DjangoWebProject_Theme6/settings.py и измените:
+
+1. DEBUG = False  (вместо True)
+
+2. Добавьте ваш домен в ALLOWED_HOSTS:
+   ALLOWED_HOSTS = ['ваш_username.pythonanywhere.com']
+
+3. Проверьте пути к статическим файлам:
+   STATIC_ROOT = '/home/ваш_username/ваш_проект/static'
+   STATIC_URL = '/static/'
+   
+   MEDIA_ROOT = '/home/ваш_username/ваш_проект/media'
+   MEDIA_URL = '/media/'
+
+
+ШАГ 7: НАСТРОЙКА WSGI ФАЙЛА
+----------------------------
+
+1. В панели управления нажмите "Web"
+
+2. Нажмите на ссылку WSGI configuration file
+
+3. Замените содержимое файла на:
+
+   import os
+   import sys
+   
+   # путь к вашему проекту
+   path = '/home/ваш_username/ваш_проект'
+   if path not in sys.path:
+       sys.path.append(path)
+   
+   # путь к виртуальному окружению
+   activate_this = '/home/ваш_username/.virtualenvs/myenv/bin/activate_this.py'
+   with open(activate_this) as file_:
+       exec(file_.read(), dict(__file__=activate_this))
+   
+   os.environ['DJANGO_SETTINGS_MODULE'] = 'DjangoWebProject_Theme6.settings'
+   
+   from django.core.wsgi import get_wsgi_application
+   application = get_wsgi_application()
+
+4. Сохраните файл
+
+
+ШАГ 8: НАСТРОЙКА СТАТИЧЕСКИХ И МЕДИА ФАЙЛОВ В WEB
+--------------------------------------------------
+
+1. В панели управления нажмите "Web"
+
+2. Прокрутите вниз до раздела "Static files"
+
+3. Добавьте записи:
+
+   URL: /static/
+   Directory: /home/ваш_username/ваш_проект/static
+   
+   URL: /media/
+   Directory: /home/ваш_username/ваш_проект/media
+
+4. Нажмите "Reload" для применения изменений
+
+
+ШАГ 9: ЗАПУСК САЙТА
+--------------------
+
+1. В панели управления нажмите "Web"
+
+2. Нажмите зеленую кнопку "Reload" (перезагрузка веб-приложения)
+
+3. Откройте ваш сайт:
+   http://ваш_username.pythonanywhere.com/
+
+
+ШАГ 10: ПРОВЕРКА РАБОТЫ
+------------------------
+
+1. Проверьте главную страницу
+2. Проверьте админ-панель: /admin/
+3. Проверьте загрузку статических файлов (CSS, изображения)
+4. Проверьте работу форм
+
+
+ВАЖНЫЕ ЗАМЕЧАНИЯ:
+-----------------
+
+1. SECRET_KEY: В production лучше использовать переменную окружения:
+   import os
+   SECRET_KEY = os.environ.get('SECRET_KEY', 'ваш_секретный_ключ')
+
+2. База данных: SQLite работает на PythonAnywhere, но для production
+   лучше использовать MySQL (доступен на платных тарифах)
+
+3. Ограничения бесплатного аккаунта:
+   - Сайт "засыпает" после неактивности
+   - Ограниченное количество внешних запросов
+   - Один веб-проект
+
+4. Обновление кода:
+   - После изменений в коде нажмите "Reload" в разделе Web
+   - После изменений в статических файлах выполните collectstatic
+
+5. Логи:
+   - Ошибки сервера: /var/log/ваш_username.pythonanywhere.com.error.log
+   - Просмотр через панель управления → Files
+
+
+ЧАСТЫЕ ПРОБЛЕМЫ И РЕШЕНИЯ:
+---------------------------
+
+Проблема: "ModuleNotFoundError"
+Решение: Проверьте, что виртуальное окружение активировано в WSGI файле
+
+Проблема: Статические файлы не загружаются
+Решение: 
+- Выполните collectstatic
+- Проверьте настройки Static files в разделе Web
+- Проверьте пути в settings.py
+
+Проблема: "DisallowedHost"
+Решение: Добавьте домен в ALLOWED_HOSTS в settings.py
+
+Проблема: База данных не работает
+Решение: Проверьте права доступа к файлу db.sqlite3
+
+
+ПОЛЕЗНЫЕ КОМАНДЫ:
+-----------------
+
+# Активировать виртуальное окружение
+workon myenv
+
+# Перейти в папку проекта
+cd ~/DjangoWebProject_Theme6-main
+
+# Применить миграции
+python manage.py migrate
+
+# Создать суперпользователя
+python manage.py createsuperuser
+
+# Собрать статические файлы
+python manage.py collectstatic
+
+# Открыть Python shell
+python manage.py shell
+
+
+ДОПОЛНИТЕЛЬНЫЕ РЕСУРСЫ:
+-----------------------
+
+Официальная документация PythonAnywhere:
+https://help.pythonanywhere.com/pages/DeployExistingDjangoProject/
+
+Django deployment checklist:
+https://docs.djangoproject.com/en/stable/howto/deployment/checklist/
+
+
+
+

@@ -1,0 +1,74 @@
+{% extends "app/layout.html" %}
+
+{% load staticfiles %}
+
+{% block content %}
+
+<h2>{{ title }}</h2>
+<h3>{{ message }}</h3>
+
+{% if appointments %}
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Пациент</th>
+                    <th>Врач</th>
+                    <th>Специальность</th>
+                    <th>Дата приёма</th>
+                    <th>Время</th>
+                    <th>Телефон</th>
+                    <th>E-mail</th>
+                    <th>Статус</th>
+                    <th>Дата создания записи</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appointment in appointments %}
+                <tr>
+                    <td>{{ appointment.patient_name }}</td>
+                    <td>{{ appointment.doctor.full_name }}</td>
+                    <td>{{ appointment.doctor.specialty }}</td>
+                    <td>{{ appointment.appointment_date|date:"d.m.Y" }}</td>
+                    <td>{{ appointment.appointment_time }}</td>
+                    <td>{{ appointment.phone }}</td>
+                    <td>{% if appointment.email %}{{ appointment.email }}{% else %}-{% endif %}</td>
+                    <td>
+                        {% if appointment.is_confirmed %}
+                            <span class="label label-success">Подтверждена</span>
+                        {% else %}
+                            <span class="label label-warning">Ожидает подтверждения</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ appointment.created_at|date:"d.m.Y H:i" }}</td>
+                </tr>
+                {% if appointment.comment %}
+                <tr>
+                    <td colspan="9" class="text-muted">
+                        <small><strong>Комментарий:</strong> {{ appointment.comment }}</small>
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <p class="text-info">
+        <strong>Всего записей:</strong> {{ appointments|length }}
+    </p>
+{% else %}
+    <div class="alert alert-info" role="alert">
+        Записи на приём пока отсутствуют.
+    </div>
+{% endif %}
+
+<p style="margin-top: 30px;">
+    <a href="{% url 'contact' %}" class="btn btn-primary">Записаться на приём</a>
+    {% if user.is_superuser %}
+        <a href="{% url 'admin:app_appointment_changelist' %}" class="btn btn-default">Управление записями (админка)</a>
+    {% endif %}
+</p>
+
+{% endblock %}
+

@@ -1,0 +1,75 @@
+БЫСТРЫЙ СТАРТ: РАЗВЕРТЫВАНИЕ НА PYTHONANYWHERE
+==============================================
+
+КРАТКАЯ ИНСТРУКЦИЯ (10 ШАГОВ):
+-------------------------------
+
+1. РЕГИСТРАЦИЯ
+   - Зайдите на https://www.pythonanywhere.com/
+   - Зарегистрируйтесь (бесплатно)
+
+2. ЗАГРУЗКА ПРОЕКТА
+   - Откройте "Files" в панели управления
+   - Загрузите все файлы проекта в папку /home/ваш_username/
+
+3. СОЗДАНИЕ ВИРТУАЛЬНОГО ОКРУЖЕНИЯ
+   - Откройте "Consoles" → "Bash"
+   - Выполните: mkvirtualenv --python=/usr/bin/python3.9 myenv
+   - Активируйте: workon myenv
+
+4. УСТАНОВКА ЗАВИСИМОСТЕЙ
+   - cd ~/DjangoWebProject_Theme6-main
+   - pip install --user django==1.11.29
+
+5. НАСТРОЙКА SETTINGS.PY
+   - Откройте DjangoWebProject_Theme6/settings.py
+   - Измените: DEBUG = False
+   - Добавьте: ALLOWED_HOSTS = ['ваш_username.pythonanywhere.com']
+
+6. МИГРАЦИИ И СУПЕРПОЛЬЗОВАТЕЛЬ
+   - python manage.py migrate
+   - python manage.py createsuperuser
+
+7. СБОР СТАТИЧЕСКИХ ФАЙЛОВ
+   - python manage.py collectstatic
+
+8. НАСТРОЙКА WSGI
+   - В панели управления → "Web"
+   - Нажмите на ссылку "WSGI configuration file"
+   - Замените содержимое на код из файла wsgi_pythonanywhere.py
+   - (Не забудьте заменить 'ваш_username' на ваш username!)
+
+9. НАСТРОЙКА СТАТИЧЕСКИХ ФАЙЛОВ
+   - В разделе "Web" → "Static files"
+   - Добавьте:
+     URL: /static/
+     Directory: /home/ваш_username/DjangoWebProject_Theme6-main/static
+   - Добавьте:
+     URL: /media/
+     Directory: /home/ваш_username/DjangoWebProject_Theme6-main/media
+
+10. ЗАПУСК
+    - Нажмите зеленую кнопку "Reload" в разделе "Web"
+    - Откройте: http://ваш_username.pythonanywhere.com/
+
+
+ВАЖНО:
+------
+- Замените все вхождения 'ваш_username' на ваш реальный username
+- Замените 'DjangoWebProject_Theme6-main' на имя вашей папки проекта
+- Замените 'myenv' на имя вашего виртуального окружения (если другое)
+
+
+ПОЛНАЯ ИНСТРУКЦИЯ:
+------------------
+Смотрите файл: РАЗВЕРТЫВАНИЕ_PYTHONANYWHERE.txt
+
+
+ПОМОЩЬ:
+-------
+- Официальная документация: https://help.pythonanywhere.com/
+- Форум поддержки: https://www.pythonanywhere.com/forums/
+
+
+
+

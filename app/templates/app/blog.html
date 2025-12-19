@@ -1,0 +1,23 @@
+﻿{% extends "app/layout.html" %}
+
+{% block content %}
+<h2>{{ title }}</h2> 
+
+{% for post in posts %}
+<hr/>
+<div class="row">
+    <div class="col-md-3">
+        {% if post.image and post.image.url != '/media/temp.jpg' %}
+            <img src="{{ post.image.url }}" alt="Картинка новости" class="img-responsive img-thumbnail">
+        {% endif %}
+    </div>
+    <div class="col-md-9">
+        <h3>{{ post.title }}</h3>
+        <h4 class="post-date">{{ post.posted }}</h4>
+        <p>{{ post.description }}</p>
+        <p><a href="{% url 'blogpost' parametr=post.id %}">Читать далее</a></p>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}
